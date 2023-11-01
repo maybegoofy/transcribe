@@ -33,14 +33,20 @@ totlines = 6 #total number of lines the banner will occupy   #
 #                                                            #
 ##############################################################
 
-files = glob.glob('*.json') #list what files are available
+
+path = os.getcwd()  #sets the working directory. Currently this one.
+pathVid = f'{path}\in' #sets the directory where videos will be stored
+pathIn = f'{path}\out\otranscribe' #sets directory where .json files are stored 
+pathOut = f'{path}\out\html' #sets directory where the .html files will be output
+
+files = glob.glob(f'{pathIn}\*.json') #list what files are available
 
 for l in range(len(files)):             #print out all files available and what to enter to index them
     print(f'{str(l+1)}:  {files[l]}') 
 
 pickedFile = int(input('which file from the index above?(number please)')) #ask which file to choose and define "pickedFile" value
 
-path = "" #sets the working directory. Currently this one.
+
 file = files[pickedFile-1] #defines the name of the file to be opened, SPECIFICALLY the json output of transcribe
 
 
@@ -74,7 +80,7 @@ def dictBreakDown(js): #strips each input dictionary(line) of its content, putti
         #print('punk')
         if 'content' in val1keys:
             if (val1['content'] == '.' or val1['content'] == '!' or val1['content'] == '?'): #make a new line if it's the end of a sentence
-                return(val1['content'] +"\n")
+                return(val1['content'] +"<br>\n")
             else:
                 return(val1['content'])
     else:
@@ -88,7 +94,7 @@ def dictBreakDown(js): #strips each input dictionary(line) of its content, putti
 ##################################################################
 
 
-jason = open(path+file) #opens the .json as jason (moreso just takes the file and gives us the details of it)
+jason = open(file) #opens the .json as jason (moreso just takes the file and gives us the details of it)
 
 jasonLoad = json.load(jason) #loads the file (actually opens it to look at its contents)
 
@@ -119,12 +125,16 @@ for t in range(len(jasonItems)): #loops through each line(?) in the "items"
 
 
 bannerLines = [ [''],[''],[''],[''],[''],['']]
+
 bannerLines[0] = [     #honecomb index 0
-    ' /    \      /    \      /    \      /    \      /    \      /    \   ',
-    '/      \____/      \____/      \____/      \____/      \____/      \__',
-    '\      /    \      /    \      /    \      /    \      /    \      /  ',
-    ' \____/      \____/      \____/      \____/      \____/      \____/   '
+    '| /    \      /    \      /    \      /    \      /    \      /    \   |',
+    '|/      \____/      \____/      \____/      \____/      \____/      \__|',
+    '|\      /    \      /    \      /    \      /    \      /    \      /  |',
+    '| \____/      \____/      \____/      \____/      \____/      \____/   |'
 ]
+#&nbsp;
+
+
 
 bannerLines[1] = [     #double helix(?) index 1
     "  .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-",
@@ -171,9 +181,9 @@ banner = ''
 
 for b in range(totlines):
     n = b % len(bannerLine)
-    banner = banner + bannerLine[n] + '\n'
+    banner = banner + bannerLine[n] + '<br>\n'
 
-
+print(banner)
 ##################################################################
 ##                                                              ##
 ##                            Output                            ##
@@ -181,8 +191,8 @@ for b in range(totlines):
 ##################################################################
 
 
-werds = f'Video File Name: {jasonJob[1]}\nGenerated at: {time.asctime(time.gmtime())} UTC\n \n \n{banner} \n \n{werds} \n \n{banner}\n \n{jasonJob[1]}.txt' #format the text output
-
+werdsHTML = f'Video File Name: {jasonJob[1]}\nGenerated at: {time.asctime(time.gmtime())} UTC\n \n \n{banner} \n \n{werds} \n \n{banner}\n \n{jasonJob[1]}.txt' #format the text output
+#werdsHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<title>'+str(jasonJob[1])+'</title>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<style>\nbody {\n\tfont-family: Arial, Helvetica, sans-serif;\n}</style>\n</head>\n<body>\n\n<h1>'+str(werds)+'</h1>'
 
 ############################################################################################
 #                                     Example Format                                       #
@@ -205,10 +215,33 @@ werds = f'Video File Name: {jasonJob[1]}\nGenerated at: {time.asctime(time.gmtim
 #                                                                                          #
 ############################################################################################
 
+'''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Page Title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
 
-werdBytes = str.encode(werds) #encode the formatted text to be written
+<h1>My Website</h1>
+<p>A website created by me.</p>
 
-outie = os.open(f'{jasonJob[1]}.txt',os.O_RDWR|os.O_CREAT) #create/define the output file 
+</body>
+</html>
+
+'''
+
+
+werdBytes = str.encode(werdsHTML) #encode the formatted text to be written
+
+outie = os.open(f'{pathOut}\{jasonJob[1]}.txt',os.O_RDWR|os.O_CREAT) #create/define the output file 
 
 os.write(outie, werdBytes) #write to the output file
 
