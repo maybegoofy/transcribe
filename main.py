@@ -1,7 +1,7 @@
 """
 Program Name: main.py
 Programmer: goodpasturer
-Purpose: shits n giggles
+Purpose: sh*ts n giggles
 Date: 10/31/2023
 """
 
