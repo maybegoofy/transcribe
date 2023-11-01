@@ -35,11 +35,18 @@ totlines = 6 #total number of lines the banner will occupy   #
 
 
 path = os.getcwd()  #sets the working directory. Currently this one.
-pathVid = f'{path}\in' #sets the directory where videos will be stored
-pathIn = f'{path}\out\otranscribe' #sets directory where .json files are stored 
-pathOut = f'{path}\out\html' #sets directory where the .html files will be output
-
-files = glob.glob(f'{pathIn}\*.json') #list what files are available
+print(path)
+#linux paths
+pathVid = f'{path}/in/' #sets the directory where videos will be stored
+pathIn = f'{path}/out/otranscribe/' #sets directory where .json files are stored 
+pathOut = f'{path}/out/html/' #sets directory where the .html files will be output
+'''
+#windows paths may automate later, idk
+pathVid = f'{path}\in\' #sets the directory where videos will be stored
+pathIn = f'{path}\out\otranscribe\' #sets directory where .json files are stored 
+pathOut = f'{path}\out\html\' #sets directory where the .html files will be output
+'''
+files = glob.glob(f'{pathIn}*.json') #list what files are available
 
 for l in range(len(files)):             #print out all files available and what to enter to index them
     print(f'{str(l+1)}:  {files[l]}') 
@@ -80,7 +87,7 @@ def dictBreakDown(js): #strips each input dictionary(line) of its content, putti
         #print('punk')
         if 'content' in val1keys:
             if (val1['content'] == '.' or val1['content'] == '!' or val1['content'] == '?'): #make a new line if it's the end of a sentence
-                return(val1['content'] +"<br>\n")
+                return(val1['content'] +"<br>\n\t\t")
             else:
                 return(val1['content'])
     else:
@@ -102,6 +109,8 @@ jasonLoadItems = tuple(jasonLoad.items()) #breaks out the .json into a tuple(was
 
 jasonJob = list(jasonLoadItems[0]) #finds the title of the video index 0 is "jobName", index 1 is the title
 
+jasonTitle = jasonJob[1][8:]
+
 #jasonStatus = list(jasonLoadItems[2]) #pulls the status of the job(likely COMPLETED) index 0 is "status", index 1 is the status
 
 jasonOutput = list(jasonLoadItems[3]) #pulls the results/output of the job, index 0 is "results" index 1 is the output (formatted as a dictionary)
@@ -112,7 +121,7 @@ jasonOutput2Keys = list(jasonOutput2.keys()) #pulls the keys of the dictionary o
 
 jasonItems = jasonOutput2[jasonOutput2Keys[1]] #pulls the output of the dictionary labled with the key "items" (excludes initial transcription, for that print with index 0)
 
-werds = "" #creates empty output word list
+werds = "\t\t" #creates empty output word list
 for t in range(len(jasonItems)): #loops through each line(?) in the "items"
     werds += dictBreakDown(jasonItems[t]) #runs the "line" through the dictBreakdown() function to strip the excess info and format it
 
@@ -127,50 +136,51 @@ for t in range(len(jasonItems)): #loops through each line(?) in the "items"
 bannerLines = [ [''],[''],[''],[''],[''],['']]
 
 bannerLines[0] = [     #honecomb index 0
-    '| /    \      /    \      /    \      /    \      /    \      /    \   |',
-    '|/      \____/      \____/      \____/      \____/      \____/      \__|',
-    '|\      /    \      /    \      /    \      /    \      /    \      /  |',
-    '| \____/      \____/      \____/      \____/      \____/      \____/   |'
+    '|&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;|',
+    '|/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__|',
+    '|\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;|',
+    '|&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\____/&nbsp;&nbsp;&nbsp;|'
 ]
-#&nbsp;
-
-
 
 bannerLines[1] = [     #double helix(?) index 1
-    "  .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-",
-    " / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ ",
-    "`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'"
+    "|&nbsp;&nbsp;.-.-.&nbsp;&nbsp;&nbsp;.-.-.&nbsp;&nbsp;&nbsp;.-.-.&nbsp;&nbsp;&nbsp;.-.-.&nbsp;&nbsp;&nbsp;.-.-.&nbsp;&nbsp;&nbsp;.-.-.&nbsp;&nbsp;&nbsp;.-.-.&nbsp;&nbsp;&nbsp;.-.-&nbsp;|"
+    "|&nbsp;/&nbsp;/&nbsp;\&nbsp;\&nbsp;/&nbsp;/&nbsp;\&nbsp;\&nbsp;/&nbsp;/&nbsp;\&nbsp;\&nbsp;/&nbsp;/&nbsp;\&nbsp;\&nbsp;/&nbsp;/&nbsp;\&nbsp;\&nbsp;/&nbsp;/&nbsp;\&nbsp;\&nbsp;/&nbsp;/&nbsp;\&nbsp;\&nbsp;/&nbsp;/&nbsp;\&nbsp;|"
+    "|`-'&nbsp;&nbsp;&nbsp;`-`-'&nbsp;&nbsp;&nbsp;`-`-'&nbsp;&nbsp;&nbsp;`-`-'&nbsp;&nbsp;&nbsp;`-`-'&nbsp;&nbsp;&nbsp;`-`-'&nbsp;&nbsp;&nbsp;`-`-'&nbsp;&nbsp;&nbsp;`-`-'&nbsp;&nbsp;&nbsp;&nbsp;|"
 ]
 
 bannerLines[2] = [     #hearts index 2
-    " .-.-.  .-.-.  .-.-.  .-.-.  .-.-.  .-.-.  .-.-.  .-.-.  .-.-.  ",
-    "=`. .'==`. .'==`. .'==`. .'==`. .'==`. .'==`. .'==`. .'==`. .'= ",
-    '   "      "      "      "      "      "      "      "      "    ' 
+    "|&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;.-.-.&nbsp;&nbsp;|",
+    "|=`.&nbsp;.'==`.&nbsp;.'==`.&nbsp;.'==`.&nbsp;.'==`.&nbsp;.'==`.&nbsp;.'==`.&nbsp;.'==`.&nbsp;.'==`.&nbsp;.'=&nbsp;|",
+    '|&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;&nbsp;&nbsp;&nbsp;|'
+
 ]
+
 bannerLines[3] = [     #fence(I think???) index 3
-    "              ,'|     _ |`,      _            ,'|     _ |`,      _      ",
-    '(:\          ///     /:) \ \    (:\          ///     /:) \ \    (:\     ',
-    ' \:\        )//     /:/   \ (    \:\        )//     /:/   \ (    \:\    ',
-    '==\:(======/:(=====):/=====):\====\:(======/:(=====):/=====):\====\:(===',
-    '   ) \    /:/     //(       \:\    ) \    /:/     //(       \:\    ) \  ',
-    '    \ \  (:/     ///         \:)    \ \  (:/     ///         \:)    \ \ ',
-    "     `.|  '     |.'           '      `.|  '     |.'           '      `.|"
-    ]
+    "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,'|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;|`,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,'|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;|`,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|",
+    '|(:\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/:)&nbsp;\&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;(:\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/:)&nbsp;\&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;(:\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|',
+    '|&nbsp;\:\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/:/&nbsp;&nbsp;&nbsp;\&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;\:\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/:/&nbsp;&nbsp;&nbsp;\&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;\:\&nbsp;&nbsp;&nbsp;&nbsp;|',
+    '|==\:(======/:(=====):/=====):\====\:(======/:(=====):/=====):\====\:(===|',
+    '|&nbsp;&nbsp;&nbsp;)&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;/:/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\:\&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;/:/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\:\&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;\&nbsp;&nbsp;|',
+    '|&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;\&nbsp;&nbsp;(:/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\:)&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;\&nbsp;&nbsp;(:/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\:)&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;\&nbsp;|',
+    "|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`.|&nbsp;&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`.|&nbsp;&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`.&nbsp;|"
+  
+]
 
 bannerLines[4] = [     #hexa-triangle thingies index 4
-'     /   __/     /   __/     /   __/     /   __/     /   __/     /   _',
-'__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/ ',
-'  \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \ ',
-'__/     /   __/     /   __/     /   __/     /   __/     /   __/     / ',
-'  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \_',
-'     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/ ',
-'   __/     /   __/     /   __/     /   __/     /   __/     /   __/    ',
-'__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__  ',
-'  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \_',
-'  /   __/     /   __/     /   __/     /   __/     /   __/     /   __/ ',
-'  \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \_',
-'__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \    '
+    '|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;_|',
+    '|__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;|',
+    '|&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;|',
+    '|__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;|',
+    '|&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\_|',
+    '|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;|',
+    '|&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;|',
+    '|__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;|',
+    '|&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\_|',
+    '|&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;__/&nbsp;|',
+    '|&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\__&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\_|',
+    '|__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\__/&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;|'
 ]
+
 bannerLines[5] = [     #none/blank index 5
     ""
 ]
@@ -181,9 +191,9 @@ banner = ''
 
 for b in range(totlines):
     n = b % len(bannerLine)
-    banner = banner + bannerLine[n] + '<br>\n'
+    banner = banner + '\t\t' + bannerLine[n] + '<br>\n'
 
-print(banner)
+#print(banner)
 ##################################################################
 ##                                                              ##
 ##                            Output                            ##
@@ -191,8 +201,8 @@ print(banner)
 ##################################################################
 
 
-werdsHTML = f'Video File Name: {jasonJob[1]}\nGenerated at: {time.asctime(time.gmtime())} UTC\n \n \n{banner} \n \n{werds} \n \n{banner}\n \n{jasonJob[1]}.txt' #format the text output
-#werdsHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<title>'+str(jasonJob[1])+'</title>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<style>\nbody {\n\tfont-family: Arial, Helvetica, sans-serif;\n}</style>\n</head>\n<body>\n\n<h1>'+str(werds)+'</h1>'
+#werdsHTML = f'Video File Name: {jasonJob[1]}\nGenerated at: {time.asctime(time.gmtime())} UTC\n \n \n{banner} \n \n{werds} \n \n{banner}\n \n{jasonJob[1]}.txt' #format the text output
+werdsHTML = '<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<title>\n\t\t'+str(jasonTitle)+'\n\t</title>\n\n\t<meta charset="UTF-8">\n\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\n\t<style>\n\t\theader {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 40px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\ttime {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 13px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\th2 {\n\t\t\tfont-family: monospace;\n\t\t\tfont-size: 18px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\tbody {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t}\n\n\t\tfooter {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 10px;\n\t\t\ttext-align: center;\n\t\t}\n\t</style>\n</head>\n\n<header>\n\t<h1>\n\t\t'+str(jasonTitle)+'\n\t</h1>\n</header>\n\n<time>\n\t<p>\n\t\tGenerated at: '+str(time.asctime(time.gmtime()))+' UTC\n\t</p>\n</time>\n\n<body>\n\t<h2>\n\t\t<br>\n'+str(banner)+'\t\t<br>\n\t</h2>\n\n\t<p>\n\t\t<br>\n'+str(werds)+'<br>\n\t</p>\n\n\t<h2>\n\t\t<br>\n'+str(banner)+'\t\t<br>\n\t</h2>\n</body>\n\n<footer>\n\t<p>\n\t\t'+str(jasonJob[1])+'.html\n\t</p>\n</footer>\n\n</html>'
 
 ############################################################################################
 #                                     Example Format                                       #
@@ -211,37 +221,14 @@ werdsHTML = f'Video File Name: {jasonJob[1]}\nGenerated at: {time.asctime(time.g
 #{banner}                                                                                  #
 #                                                                                          #
 #                                                                                          #
-#{Name}.txt                                                                                #
+#{Name}.html                                                                                #
 #                                                                                          #
 ############################################################################################
-
-'''
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>Page Title</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-</style>
-</head>
-<body>
-
-<h1>My Website</h1>
-<p>A website created by me.</p>
-
-</body>
-</html>
-
-'''
 
 
 werdBytes = str.encode(werdsHTML) #encode the formatted text to be written
 
-outie = os.open(f'{pathOut}\{jasonJob[1]}.txt',os.O_RDWR|os.O_CREAT) #create/define the output file 
+outie = os.open(f'{pathOut}{jasonJob[1]}.html',os.O_RDWR|os.O_CREAT) #create/define the output file 
 
 os.write(outie, werdBytes) #write to the output file
 
