@@ -15,6 +15,7 @@ import os
 import json
 import time
 import glob
+import shutil
 
 ##############################################################
 #                           Choices                          #
@@ -33,20 +34,16 @@ totlines = 6 #total number of lines the banner will occupy   #
 #                                                            #
 ##############################################################
 
-myOs = os.name #find what kind of machine being run on
-#print(myOs)
 
-#determines what kind of slash is needed to work with the filesystem
-if myOs == 'nt':
-    fileSystemSlash = "\ "
-else:
-    fileSystemSlash = '/'
-#print(fileSystemSlash)
+fileSystemSlash = '/'
+path = os.getcwd() + fileSystemSlash #sets the working directory. Currently this one.
+#path = ''
 
-path = os.getcwd()  #sets the working directory. Currently this one.
-pathVid = f'{path}{fileSystemSlash}in{fileSystemSlash}' #sets the directory where videos will be stored
-pathIn = f'{path}{fileSystemSlash}out{fileSystemSlash}transcribe{fileSystemSlash}' #sets directory where .json files are stored 
-pathOut = f'{path}{fileSystemSlash}out{fileSystemSlash}html{fileSystemSlash}' #sets directory where the .html files will be output
+pathVid = f'{path}in{fileSystemSlash}' #sets the directory where videos will be stored
+pathIn = f'{path}out{fileSystemSlash}transcribe{fileSystemSlash}' #sets directory where .json files are stored 
+pathOut = f'{path}out{fileSystemSlash}html{fileSystemSlash}' #sets directory where the .html files will be output
+
+#print(pathVid)
 
 files = glob.glob(f'{pathIn}*.json') #list what files are available
 
@@ -55,9 +52,7 @@ for l in range(len(files)):             #print out all files available and what 
 
 pickedFile = int(input('which file from the index above?(number please)')) #ask which file to choose and define "pickedFile" value
 
-
 file = files[pickedFile-1] #defines the name of the file to be opened, SPECIFICALLY the json output of transcribe
-
 
 ##################################################################
 ##                                                              ##
@@ -103,6 +98,9 @@ def fileCopy(file,dest):
     os.write(newfile,oldBytes)
     os.close(oldFile)
     os.close(newfile)
+    sz2 = os.path.getsize(dest)
+    print(sz2)
+    
 
 
 ##################################################################
@@ -241,12 +239,20 @@ werdsHTML = '<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<title>\n\t\t'+str(j
 
 werdBytes = str.encode(werdsHTML) #encode the formatted text to be written
 
-os.mkdir(f'{pathOut}{pathOutFile}')
 
-fileCopy(f'{pathVid}{jasonTitle}',f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonTitle}')
+if (os.path.exists(f'{pathOut}{pathOutFile}') == False):
+    os.mkdir(f'{pathOut}{pathOutFile}')
 
 outie = os.open(f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonJob[1]}.html',os.O_RDWR|os.O_CREAT) #create/define the output file 
+
+#fileCopy(f'{pathVid}{jasonTitle}',f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonTitle}')
+#os.(f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonTitle}',f'{pathVid}{jasonTitle}')
 
 os.write(outie, werdBytes) #write to the output file
 
 os.close(outie) #close the output file
+
+if (os.path.exists(f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonTitle}')):
+    os.remove(f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonTitle}')
+
+shutil.copyfile(f'{pathVid}{jasonTitle}',f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonTitle}')
