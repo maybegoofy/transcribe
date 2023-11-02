@@ -33,19 +33,21 @@ totlines = 6 #total number of lines the banner will occupy   #
 #                                                            #
 ##############################################################
 
+myOs = os.name #find what kind of machine being run on
+#print(myOs)
+
+#determines what kind of slash is needed to work with the filesystem
+if myOs == 'nt':
+    fileSystemSlash = "\ "
+else:
+    fileSystemSlash = '/'
+#print(fileSystemSlash)
 
 path = os.getcwd()  #sets the working directory. Currently this one.
-print(path)
-#linux paths
-pathVid = f'{path}/in/' #sets the directory where videos will be stored
-pathIn = f'{path}/out/otranscribe/' #sets directory where .json files are stored 
-pathOut = f'{path}/out/html/' #sets directory where the .html files will be output
-'''
-#windows paths may automate later, idk
-pathVid = f'{path}\in\' #sets the directory where videos will be stored
-pathIn = f'{path}\out\otranscribe\' #sets directory where .json files are stored 
-pathOut = f'{path}\out\html\' #sets directory where the .html files will be output
-'''
+pathVid = f'{path}{fileSystemSlash}in{fileSystemSlash}' #sets the directory where videos will be stored
+pathIn = f'{path}{fileSystemSlash}out{fileSystemSlash}transcribe{fileSystemSlash}' #sets directory where .json files are stored 
+pathOut = f'{path}{fileSystemSlash}out{fileSystemSlash}html{fileSystemSlash}' #sets directory where the .html files will be output
+
 files = glob.glob(f'{pathIn}*.json') #list what files are available
 
 for l in range(len(files)):             #print out all files available and what to enter to index them
@@ -93,6 +95,15 @@ def dictBreakDown(js): #strips each input dictionary(line) of its content, putti
     else:
         print(js[jsKeys[0]]) 
 
+def fileCopy(file,dest):
+    oldFile = os.open(file, os.O_RDONLY)
+    newfile = os.open(dest, os.O_RDWR|os.O_CREAT)
+    sz = os.path.getsize(file)
+    oldBytes = os.read(oldFile,sz)
+    os.write(newfile,oldBytes)
+    os.close(oldFile)
+    os.close(newfile)
+
 
 ##################################################################
 ##                                                              ##
@@ -109,7 +120,9 @@ jasonLoadItems = tuple(jasonLoad.items()) #breaks out the .json into a tuple(was
 
 jasonJob = list(jasonLoadItems[0]) #finds the title of the video index 0 is "jobName", index 1 is the title
 
-jasonTitle = jasonJob[1][8:]
+jasonTitle = jasonJob[1][8:] #removes project- from title
+
+pathOutFile = str(jasonJob[1][:len(jasonJob[1])-4]) #defines folder where files will go
 
 #jasonStatus = list(jasonLoadItems[2]) #pulls the status of the job(likely COMPLETED) index 0 is "status", index 1 is the status
 
@@ -202,7 +215,7 @@ for b in range(totlines):
 
 
 #werdsHTML = f'Video File Name: {jasonJob[1]}\nGenerated at: {time.asctime(time.gmtime())} UTC\n \n \n{banner} \n \n{werds} \n \n{banner}\n \n{jasonJob[1]}.txt' #format the text output
-werdsHTML = '<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<title>\n\t\t'+str(jasonTitle)+'\n\t</title>\n\n\t<meta charset="UTF-8">\n\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\n\t<style>\n\t\theader {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 40px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\ttime {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 13px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\th2 {\n\t\t\tfont-family: monospace;\n\t\t\tfont-size: 18px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\tbody {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t}\n\n\t\tfooter {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 10px;\n\t\t\ttext-align: center;\n\t\t}\n\t</style>\n</head>\n\n<header>\n\t<h1>\n\t\t'+str(jasonTitle)+'\n\t</h1>\n</header>\n\n<time>\n\t<p>\n\t\tGenerated at: '+str(time.asctime(time.gmtime()))+' UTC\n\t</p>\n</time>\n\n<body>\n\t<h2>\n\t\t<br>\n'+str(banner)+'\t\t<br>\n\t</h2>\n\n\t<p>\n\t\t<br>\n'+str(werds)+'<br>\n\t</p>\n\n\t<h2>\n\t\t<br>\n'+str(banner)+'\t\t<br>\n\t</h2>\n</body>\n\n<footer>\n\t<p>\n\t\t'+str(jasonJob[1])+'.html\n\t</p>\n</footer>\n\n</html>'
+werdsHTML = '<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<title>\n\t\t'+str(jasonTitle)+'\n\t</title>\n\n\t<meta charset="UTF-8">\n\t<meta name="viewport" content="width=device-width, initial-scale=1">\n\n\t<style>\n\t\theader {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 40px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\ttime {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 13px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\th2 {\n\t\t\tfont-family: monospace;\n\t\t\tfont-size: 18px;\n\t\t\ttext-align: center;\n\t\t}\n\n\t\tbody {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t}\n\n\t\tfooter {\n\t\t\tfont-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;\n\t\t\tfont-size: 10px;\n\t\t\ttext-align: center;\n\t\t}\n\t\tvideo {\n\t\t\tmax-width: 100%;\n\t\t\theight: auto;\n\t\t}\n\t</style>\n</head>\n\n<header>\n\t<h1>\n\t\t'+str(jasonTitle)+'\n\t</h1>\n</header>\n\n<time>\n\t<p>\n\t\tGenerated at: '+str(time.asctime(time.gmtime()))+' UTC\n\t</p>\n</time>\n\n<body>\n\t<h2>\n\t\t<br>\n'+str(banner)+'\t\t<br>\n\t</h2>\n\n\t<center>\n\t\t<video width=90% controls="controls">\n\t\t\t<source src="'+str(jasonTitle)+'" type="video/mp4" />\n\t\t</video>\n\t</center>\n\n\t<p>\n\t\t<br>\n'+str(werds)+'<br>\n\t</p>\n\n\t<h2>\n\t\t<br>\n'+str(banner)+'\t\t<br>\n\t</h2>\n</body>\n\n<footer>\n\t<p>\n\t\t'+str(jasonJob[1])+'.html\n\t</p>\n</footer>\n\n</html>'
 
 ############################################################################################
 #                                     Example Format                                       #
@@ -221,14 +234,18 @@ werdsHTML = '<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<title>\n\t\t'+str(j
 #{banner}                                                                                  #
 #                                                                                          #
 #                                                                                          #
-#{Name}.html                                                                                #
+#{Name}.html                                                                               #
 #                                                                                          #
 ############################################################################################
 
 
 werdBytes = str.encode(werdsHTML) #encode the formatted text to be written
 
-outie = os.open(f'{pathOut}{jasonJob[1]}.html',os.O_RDWR|os.O_CREAT) #create/define the output file 
+os.mkdir(f'{pathOut}{pathOutFile}')
+
+fileCopy(f'{pathVid}{jasonTitle}',f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonTitle}')
+
+outie = os.open(f'{pathOut}{pathOutFile}{fileSystemSlash}{jasonJob[1]}.html',os.O_RDWR|os.O_CREAT) #create/define the output file 
 
 os.write(outie, werdBytes) #write to the output file
 
